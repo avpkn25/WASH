@@ -1,0 +1,99 @@
+/* Reset some basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body style */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f2f7f6;
+  color: #222;
+}
+
+/* Navbar styling */
+nav {
+  background-color: #007B8A;
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Footer styling */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #007B8A;
+  color: white;
+  margin-top: 2rem;
+}
+
+/* Section spacing */
+section {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Headings */
+h1, h2 {
+  color: #004c50;
+  margin-bottom: 1rem;
+}
+
+/* Paragraphs */
+p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+button {
+  padding: 0.6rem 1.2rem;
+  background-color: #007B8A;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005f66;
+}
+
+/* Campaign cards (optional layout) */
+.campaign-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  section {
+    padding: 1rem;
+  }
+}

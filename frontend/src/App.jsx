@@ -1,6 +1,6 @@
 // File: src/App.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -11,12 +11,17 @@ import UpcomingEvents from './components/UpcomingEvents';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Blog from './components/Blog';
-
 import Login from './pages/login';
 import Signup from './admin/createdcm';
 import AdminDashboard from './admin/AdminDashboard';
 import SecretAdminLink from './admin/SecretAdminLink';
 import AdminLogin from './admin/AdminLogin';
+
+function DashboardWrapper() {
+  const location = useLocation();
+  const donor = location.state?.donor;
+  return <DonorDashboard donor={donor} />;
+}
 
 function App() {
   return (

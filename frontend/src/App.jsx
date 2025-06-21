@@ -1,6 +1,6 @@
 // File: src/App.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -12,10 +12,17 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Blog from './components/Blog';
 
+import Login from './pages/login';
+import Signup from './admin/createdcm';
+import AdminDashboard from './admin/AdminDashboard';
+import SecretAdminLink from './admin/SecretAdminLink';
+import AdminLogin from './admin/AdminLogin';
+
 function App() {
   return (
-    <>
+    <Router>
       <Header />
+      <SecretAdminLink />
       <Routes>
         <Route
           path="/"
@@ -30,10 +37,14 @@ function App() {
             </>
           }
         />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/blog" element={<Blog />} />
       </Routes>
       <Footer />
-    </>
+    </Router>
   );
 }
 

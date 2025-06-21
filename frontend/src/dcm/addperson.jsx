@@ -2,37 +2,27 @@ import React, { useState } from 'react';
 import { User, Mail, Phone, Calendar, Lock, PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-function CreateDCM() {
-  const navigate = useNavigate();
-
+function AddPerson() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    gender: '',
-    dob: '',
+    name: '', email: '', phone: '', gender: '', dob: '', password: ''
   });
-
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Full Name is required';
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
-    if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm password';
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     if (!formData.phone) newErrors.phone = 'Phone is required';
     if (!formData.gender) newErrors.gender = 'Gender is required';
     if (!formData.dob) newErrors.dob = 'Date of Birth is required';
+    if (!formData.password) newErrors.password = 'Password is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,8 +30,8 @@ function CreateDCM() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    alert('Manager added successfully!');
-    navigate('/admin-dashboard');
+    alert('Person added successfully!');
+    navigate('/dcmdashboard');
   };
 
   return (
@@ -52,18 +42,18 @@ function CreateDCM() {
             <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <PlusCircle className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">Add Manager</h1>
-            <p className="text-gray-500">Join the WASH community</p>
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">Add New Person</h1>
+            <p className="text-gray-500">Register a new individual under your center</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input name="name" placeholder="Full Name" Icon={User} value={formData.name} onChange={handleChange} error={errors.name} />
             <Input name="email" type="email" placeholder="Email" Icon={Mail} value={formData.email} onChange={handleChange} error={errors.email} />
-            <Input name="password" type="password" placeholder="Password" Icon={Lock} value={formData.password} onChange={handleChange} error={errors.password} />
-            <Input name="confirmPassword" type="password" placeholder="Re-enter Password" Icon={Lock} value={formData.confirmPassword} onChange={handleChange} error={errors.confirmPassword} />
             <Input name="phone" placeholder="Phone" Icon={Phone} value={formData.phone} onChange={handleChange} error={errors.phone} />
 
-            {/* Gender Dropdown */}
+            <Input name="password" type="password" placeholder="Password" Icon={Lock} value={formData.password} onChange={handleChange} error={errors.password} />
+
+            {/* Gender */}
             <div>
               <select
                 name="gender"
@@ -79,14 +69,14 @@ function CreateDCM() {
               {errors.gender && <p className="text-red-500 text-sm mt-1 animate-shake">{errors.gender}</p>}
             </div>
 
-            {/* Date of Birth */}
+            {/* DOB */}
             <Input name="dob" type="date" placeholder="Date of Birth" Icon={Calendar} value={formData.dob} onChange={handleChange} error={errors.dob} />
 
             <button
               type="submit"
               className="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 flex items-center justify-center space-x-2 group"
             >
-              <span>Add Manager</span>
+              <span>Add Person</span>
               <PlusCircle className="w-5 h-5 group-hover:translate-x-1 transition" />
             </button>
           </form>
@@ -115,4 +105,4 @@ const Input = ({ name, type = 'text', placeholder, Icon, value, onChange, error 
   </div>
 );
 
-export default CreateDCM;
+export default AddPerson;

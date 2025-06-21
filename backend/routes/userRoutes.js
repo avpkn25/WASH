@@ -23,6 +23,7 @@ import {
   authenticate,
   authorizeAdmin,
   authorizeDCM,
+  authorizeDonor,
   authorizeDSP,
 } from "../middleware/authMiddleware.js";
 
@@ -32,16 +33,17 @@ router.post("/login", loginUser); // done
 router.post("/logout", logoutUser); // done
 
 router.post("/create-donor", createDonor); // done
+
 // Donor Operations
-router.post("/add-fund", authenticate, authorizeDSP, addFund);
-router.get("/get-all-funds", authenticate, authorizeDSP, getAllFunds);
-router.get("/total-funds", authenticate, authorizeDSP, totalFunds);
+router.post("/add-fund", authenticate, authorizeDonor, addFund);
 
 // Admin Operations
 router.post("/create-dcm", authenticate, authorizeAdmin, createDCM);
 router.delete("/delete-dcm/:id", authenticate, authorizeAdmin, deleteDCM);
 router.get("/get-dcm", authenticate, authorizeAdmin, getAllDCMs);
 router.get("/get-donor", authenticate, authorizeAdmin, getAllDonors);
+router.get("/get-all-funds", authenticate, authorizeAdmin, getAllFunds);
+router.get("/total-funds", authenticate, authorizeAdmin, totalFunds);
 
 // DCM Operations
 router.post("/create-dsp", authenticate, authorizeDCM, createDSP);

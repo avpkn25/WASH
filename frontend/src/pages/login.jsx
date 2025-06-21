@@ -54,9 +54,16 @@ function Login() {
       }
       setIsLoading(false);
       console.log("Login successful:", data);
+
       console.log(data.role);
       if (data.role === "admin") {
         navigate("/admin-dashboard"); // Change to your admin dashboard route
+      } else if (data.role === "dcm") {
+        navigate("/dcmdashboard"); // Change to your user dashboard route
+      } else if (data.role === "dsp") {
+        navigate("/person-dashboard"); // Change to your user dashboard route
+      } else if (data.role === "donor") {
+        navigate("/"); // Change to your user dashboard route
       } else {
         setErrors({ password: "You are not authorized as admin." });
       }

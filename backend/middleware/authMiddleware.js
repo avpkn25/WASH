@@ -20,7 +20,7 @@ const authenticate = async (req, res, next) => {
 };
 
 const authorizeDSP = (req, res, next) => {
-  if (req.user && req.user.isDSP) {
+  if (req.user.role === "dsp") {
     next();
   } else {
     res.status(401).send("Not authorized as an DSP.");
@@ -28,7 +28,7 @@ const authorizeDSP = (req, res, next) => {
 };
 
 const authorizeDCM = (req, res, next) => {
-  if (req.user && req.user.isDCM) {
+  if (req.user.role === "dcm") {
     next();
   } else {
     res.status(401).send("Not authorized as an DCM.");
@@ -44,7 +44,7 @@ const authorizeAdmin = (req, res, next) => {
 };
 
 const authorizeDonor = (req, res, next) => {
-  if (req.user && req.user.isDonor) {
+  if (req.user.role === "donor") {
     next();
   } else {
     res.status(401).send("Not authorized as a Donor.");

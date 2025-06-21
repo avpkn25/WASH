@@ -1,0 +1,17 @@
+{
+  "name": "jpmc-moc-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "fullstack": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "nodemon backend/index.js",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

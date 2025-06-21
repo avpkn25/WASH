@@ -5,8 +5,12 @@ import heroImage from '../assets/hero.jpeg';
 function Hero() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
     email: '',
+    password: '',
+    phone: '',
+    gender: '',
+    dob: '',
     amount: 1
   });
 
@@ -15,22 +19,44 @@ function Hero() {
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.onload = () => {
       const options = {
-        key: 'rzp_test_6obdRLLGIPMsyR',
-        amount: formData.amount * 100, // Razorpay takes amount in paise
+        key: 'rzp_test_6obdRLLGIPMsyR', // Replace with your actual Razorpay key
+        amount: formData.amount * 100, // Amount in paise
         currency: 'INR',
-        name: formData.name,
+        name: formData.fullName,
         description: 'Support Clean Water & Hygiene',
         handler: function (response) {
           alert(`✅ Payment successful!\nPayment ID: ${response.razorpay_payment_id}`);
         },
         prefill: {
-          name: formData.name,
-          email: formData.email
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
         },
         theme: {
           color: '#f97316'
+        },
+        method: {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true
+        },
+        config: {
+          display: {
+            blocks: {
+              upi_block: {
+                name: "Pay using UPI",
+                instruments: [{ method: "upi" }]
+              }
+            },
+            sequence: ["upi_block", "other"],
+            preferences: {
+              show_default_blocks: true
+            }
+          }
         }
       };
+
       const rzp = new window.Razorpay(options);
       rzp.open();
     };
@@ -43,6 +69,7 @@ function Hero() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('📋 Registered User:', formData);
     setShowForm(false);
     loadRazorpay();
   };
@@ -50,7 +77,7 @@ function Hero() {
   return (
     <section
       className="relative bg-cover bg-center bg-no-repeat min-h-[85vh] flex items-center justify-center text-center px-4"
-      style={{ backgroundImage: `url(${heroImage})` }}
+      style={{ backgroundImage: `url(${heroImage})` }} // ✅ Fix: wrap with backticks
     >
       <motion.div
         className="relative z-10 text-white max-w-3xl px-4"
@@ -75,7 +102,6 @@ function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Modal Form */}
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative">
@@ -85,13 +111,13 @@ function Hero() {
             >
               &times;
             </button>
-            <h2 className="text-xl font-bold mb-4 text-orange-600">Enter Donation Details</h2>
+            <h2 className="text-xl font-bold mb-4 text-orange-600">Register to Donate</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
-                name="name"
+                name="fullName"
                 placeholder="Full Name"
-                value={formData.name}
+                value={formData.fullName}
                 onChange={handleInputChange}
                 required
                 className="w-full border border-gray-300 rounded px-4 py-2"
@@ -106,19 +132,58 @@ function Hero() {
                 className="w-full border border-gray-300 rounded px-4 py-2"
               />
               <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                className="w-full border border-gray-300 rounded px-4 py-2"
+              />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+                className="w-full border border-gray-300 rounded px-4 py-2"
+              />
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className="w-full border border-gray-300 rounded px-4 py-2"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
+                className="w-full border border-gray-300 rounded px-4 py-2"
+              />
+              <input
                 type="number"
                 name="amount"
-                placeholder="Amount (INR)"
+                placeholder="Donation Amount (INR)"
                 value={formData.amount}
                 onChange={handleInputChange}
                 required
+                min="1"
                 className="w-full border border-gray-300 rounded px-4 py-2"
               />
               <button
                 type="submit"
                 className="bg-orange-500 text-white w-full py-2 rounded hover:bg-orange-600"
               >
-                Proceed to Pay
+                Register & Pay
               </button>
             </form>
           </div>

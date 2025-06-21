@@ -13,10 +13,17 @@ import {
   deleteDSP,
   getAllDSPs,
 } from "../controllers/userController.js";
+
+import {
+  addFund,
+  getAllFunds,
+  totalFunds,
+} from "../controllers/fundController.js";
 import {
   authenticate,
   authorizeAdmin,
   authorizeDCM,
+  authorizeDSP,
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -25,6 +32,10 @@ router.post("/login", loginUser); // done
 router.post("/logout", logoutUser); // done
 
 router.post("/create-donor", createDonor); // done
+// Donor Operations
+router.post("add-fund", authenticate, authorizeDSP, addFund);
+router.get("get-all-funds", authenticate, authorizeDSP, getAllFunds);
+router.get("total-funds", authenticate, authorizeDSP, totalFunds);
 
 // Admin Operations
 router.post("create-dcm", authenticate, authorizeAdmin, createDCM);

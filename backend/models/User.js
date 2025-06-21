@@ -23,18 +23,16 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
+      enum: ["MALE", "FEMALE", "OTHER"],
+      required: true,
     },
     dob: {
       type: Date,
       required: true,
     },
-    isDCM: {
-      type: Boolean,
-      default: false,
-    },
-    isDSP: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: String,
+      enum: ["donor", "dcm", "dsp", "admin"],
     },
     createdAt: {
       type: Date,

@@ -22,6 +22,55 @@ function Hero() {
     paymentMode: 'upi'
   });
 
+  const loadRazorpay = () => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => {
+      const options = {
+        key: 'rzp_test_6obdRLLGIPMsyR', // Replace with your actual Razorpay key
+        amount: formData.amount * 100,
+        currency: 'INR',
+        name: formData.fullName,
+        description: 'Support Clean Water & Hygiene',
+        handler: function (response) {
+          alert(`✅ Payment successful!\nPayment ID: ${response.razorpay_payment_id}`);
+        },
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: {
+          color: '#f97316'
+        },
+        method: {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true
+        },
+        config: {
+          display: {
+            blocks: {
+              upi_block: {
+                name: "Pay using UPI",
+                instruments: [{ method: "upi" }]
+              }
+            },
+            sequence: ["upi_block", "other"],
+            preferences: {
+              show_default_blocks: true
+            }
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    };
+    document.body.appendChild(script);
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
@@ -78,7 +127,7 @@ function Hero() {
     generatePDF();
     setShowForm(false);
     setShowThankYou(true);
-    document.querySelector('footer').style.display = 'none'; // Hide footer
+    document.querySelector('footer').style.display = 'none';
   };
 
   const generatePDF = () => {
@@ -130,7 +179,6 @@ function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Modal Step Form */}
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative">
@@ -184,7 +232,6 @@ function Hero() {
         </div>
       )}
 
-      {/* Thank You Modal */}
       {showThankYou && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">

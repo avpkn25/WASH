@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, User, Lock, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import { Eye, EyeOff, User, Lock, ArrowRight, CloudSnow } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
@@ -20,21 +22,9 @@ function Login() {
 
     // Email Validation
     if (!email) {
-      newErrors.email = 'Email is required';
-    } else if (!email.includes('@')) {
-      newErrors.email = 'Email must contain @';
-    }
-
-    // Password Validation
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    const hasNumber = /\d/.test(password);
-
-    if (!password) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 8 || password.length > 16) {
-      newErrors.password = 'Password must be 8-16 characters';
-    } else if (!hasSpecialChar || !hasNumber) {
-      newErrors.password = 'Password must contain at least one special character and one number';
+      newErrors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      newErrors.email = "Email must contain @";
     }
 
     setErrors(newErrors);
@@ -45,11 +35,36 @@ function Login() {
     e.preventDefault();
     if (!validateForm()) return;
     setIsLoading(true);
-    setTimeout(() => {
+    setErrors({});
+    try {
+      const response = await fetch("/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+      console.log("response: " + response);
+      const data = await response.json();
+      if (!response.ok) {
+        setErrors({ password: data.message || "Login failed" });
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(false);
-      alert('Login successful!');
-      // navigate('/dashboard');
-    }, 1500);
+      console.log("Login successful:", data);
+      console.log(data.role);
+      if (data.role === "admin") {
+        navigate("/admin-dashboard"); // Change to your admin dashboard route
+      } else {
+        setErrors({ password: "You are not authorized as admin." });
+      }
+      console.log(data.role);
+    } catch (err) {
+      setErrors({ password: "Network error. Please try again." });
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,7 +76,9 @@ function Login() {
             <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover:scale-110 transition-transform duration-300">
               <User className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2 animate-fade-in">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2 animate-fade-in">
+              Welcome Back
+            </h1>
             <p className="text-gray-500">Join the WASH community</p>
           </div>
 
@@ -81,13 +98,15 @@ function Login() {
                 <Lock className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Password"
                 className={`w-full pl-12 pr-12 py-4 bg-gray-50 border rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 ${
-                  errors.password ? 'border-red-400 focus:ring-red-500' : 'border-gray-300'
+                  errors.password
+                    ? "border-red-400 focus:ring-red-500"
+                    : "border-gray-300"
                 }`}
               />
               <button
@@ -95,10 +114,16 @@ function Login() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-4 text-gray-400"
               >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
               </button>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1 animate-shake">{errors.password}</p>
+                <p className="text-red-500 text-sm mt-1 animate-shake">
+                  {errors.password}
+                </p>
               )}
             </div>
 
@@ -149,9 +174,18 @@ function Login() {
         }
 
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20%, 60% { transform: translateX(-5px); }
-          40%, 80% { transform: translateX(5px); }
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          20%,
+          60% {
+            transform: translateX(-5px);
+          }
+          40%,
+          80% {
+            transform: translateX(5px);
+          }
         }
 
         .animate-fade-slide {
@@ -183,10 +217,12 @@ const Input = ({ name, placeholder, Icon, value, onChange, error }) => (
       onChange={onChange}
       placeholder={placeholder}
       className={`w-full pl-12 pr-4 py-4 bg-gray-50 border rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 ${
-        error ? 'border-red-400 focus:ring-red-500' : 'border-gray-300'
+        error ? "border-red-400 focus:ring-red-500" : "border-gray-300"
       }`}
     />
-    {error && <p className="text-red-500 text-sm mt-1 animate-shake">{error}</p>}
+    {error && (
+      <p className="text-red-500 text-sm mt-1 animate-shake">{error}</p>
+    )}
   </div>
 );
 

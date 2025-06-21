@@ -36,7 +36,7 @@ const authorizeDCM = (req, res, next) => {
 };
 
 const authorizeAdmin = (req, res, next) => {
-  if (req.admin) {
+  if (req.user.role === "admin") {
     next();
   } else {
     res.status(401).send("Not authorized as an Admin.");

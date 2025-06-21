@@ -1,6 +1,6 @@
 // File: src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -20,7 +20,7 @@ import AdminLogin from './admin/AdminLogin';
 
 function App() {
   return (
-    <Router>
+    <>
       <Header />
       <SecretAdminLink />
       <Routes>
@@ -44,7 +44,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
       </Routes>
       <Footer />
-    </Router>
+    </>
   );
 }
 

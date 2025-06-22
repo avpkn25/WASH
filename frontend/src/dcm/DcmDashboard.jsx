@@ -28,7 +28,7 @@ function DcmDashboard() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-3xl px-4">
           <DashboardCard
             icon={<UserPlus className="w-10 h-10 text-orange-500 mb-4" />}
             title="Add Person"
@@ -42,6 +42,13 @@ function DcmDashboard() {
             desc="View, update or remove person records."
             buttonText="Manage"
             onClick={() => navigate('/managepersons')}
+          />
+          <DashboardCard
+          icon={<Users className="w-10 h-10 text-orange-500 mb-4" />}
+          title="Performance Report"
+          desc="View water bottles supplied and select winner."
+          buttonText="View Report"
+          onClick={() => navigate('/performance')}
           />
         </div>
       </div>

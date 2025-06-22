@@ -3,11 +3,11 @@ import nodemailer from "nodemailer";
 // Gmail SMTP with STARTTLS (port 587)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,            // ✅ use port 587 instead of 465
-  secure: false,        // ✅ must be false for STARTTLS
+  port: 587,
+  secure: false, // Use STARTTLS
   auth: {
-    user: process.env.EMAIL_USER || "your-email@gmail.com",
-    pass: process.env.EMAIL_PASS || "your-app-password",
+    user: process.env.EMAIL_USER, // Should resolve to akshi17230419@gmail.com
+    pass: process.env.EMAIL_PASS, // App password
   },
 });
 
@@ -36,7 +36,7 @@ Admin Team`;
   try {
     const toField = emails.join(",");
     const mailOptions = {
-      from: process.env.EMAIL_USER || "your-email@gmail.com",
+      from: process.env.EMAIL_USER,
       to: toField,
       subject: finalSubject,
       text: finalMessage,

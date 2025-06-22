@@ -7,6 +7,8 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-orange-100 via-white to-pink-100">
@@ -86,6 +88,20 @@ function AdminDashboard() {
               placeholder="Enter emails (comma or newline separated)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              rows={3}
+              className="w-full border border-gray-300 rounded-lg p-3 mb-2 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+            />
+            <input
+              type="text"
+              placeholder="Subject (optional)"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-3 mb-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            <textarea
+              placeholder="Message (optional)"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               rows={4}
               className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
             />
@@ -107,9 +123,11 @@ function AdminDashboard() {
                 }
 
                 try {
-                  await sendBulkEmails({ emails });
+                  await sendBulkEmails({ emails, subject, message });
                   alert(`Email sent to:\n${emails.join("\n")}`);
                   setEmail("");
+                  setSubject("");
+                  setMessage("");
                   setShowModal(false);
                 } catch (err) {
                   alert("Failed to send emails: " + err.message);

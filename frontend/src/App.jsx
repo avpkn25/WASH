@@ -1,4 +1,3 @@
-// File: src/App.jsx
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
@@ -11,6 +10,7 @@ import UpcomingEvents from './components/UpcomingEvents';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Blog from './components/Blog';
+
 import Login from './pages/login';
 import Signup from './admin/createdcm';
 import AdminDashboard from './admin/AdminDashboard';
@@ -22,19 +22,21 @@ import AddPerson from './dcm/addperson';
 import ManagePersons from './dcm/manageperson';
 import PersonDashboard from './dsp/persondashboard';
 import ManageDonations from './admin/ManageDonations';
+import Performance from './dcm/Performance';
+import ManagerPerformance from './admin/ManagerPerformance';
 
-
-function DashboardWrapper() {
-  const location = useLocation();
-  const donor = location.state?.donor;
-  return <DonorDashboard donor={donor} />;
-}
 
 function App() {
+  const location = useLocation();
+
+  // Show header only on home route "/"
+  const showHeader = location.pathname === '/';
+
   return (
     <>
-      <Header />
+      {showHeader && <Header />}
       <SecretAdminLink />
+
       <Routes>
         <Route
           path="/"
@@ -60,9 +62,11 @@ function App() {
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/person-dashboard" element={<PersonDashboard />} />
         <Route path="/managedonations" element={<ManageDonations />} />
-
         <Route path="/blog" element={<Blog />} />
+        <Route path="/performance" element={<Performance />} />
+        <Route path="/managerperformance" element={<ManagerPerformance />} />
       </Routes>
+
       <Footer />
     </>
   );

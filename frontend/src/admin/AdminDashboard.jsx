@@ -22,10 +22,10 @@ function AdminDashboard() {
 
       {/* DASHBOARD CONTENT */}
       <div className="p-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
           <DashboardCard
             icon={<User className="w-10 h-10 text-orange-500 mb-4" />}
-            title="Manage Users(Manager)"
+            title="Manage Users (Manager)"
             desc="View, approve or deactivate customer and manager accounts."
             buttonText="Go to Users"
             onClick={() => navigate('/manageusers')}
@@ -43,6 +43,13 @@ function AdminDashboard() {
             desc="Create and assign new distribution centers and managers."
             buttonText="Create Center"
             onClick={() => navigate('/createdcm')}
+          />
+          <DashboardCard
+            icon={<PackageCheck className="w-10 h-10 text-orange-500 mb-4" />}
+            title="Performance Analytics"
+            desc="Analyze manager team performance and select weekly winner."
+            buttonText="View Analytics"
+            onClick={() => navigate('/managerperformance')}
           />
         </div>
       </div>

@@ -28,23 +28,23 @@ function DcmDashboard() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-3xl px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-6xl px-6">
           <DashboardCard
-            icon={<UserPlus className="w-10 h-10 text-orange-500 mb-4" />}
+            icon={<UserPlus className="w-30 h-30 text-orange-500 mb-4" />}
             title="Add Person"
             desc="Register a new person in your distribution center."
             buttonText="Add Now"
             onClick={() => navigate('/addperson')}
           />
           <DashboardCard
-            icon={<Users className="w-10 h-10 text-orange-500 mb-4" />}
+            icon={<Users className="w-30 h-30 text-orange-500 mb-4" />}
             title="Manage Persons"
             desc="View, update or remove person records."
             buttonText="Manage"
             onClick={() => navigate('/managepersons')}
           />
           <DashboardCard
-          icon={<Users className="w-10 h-10 text-orange-500 mb-4" />}
+          icon={<Users className="w-30 h-30 text-orange-500 mb-4" />}
           title="Performance Report"
           desc="View water bottles supplied and select winner."
           buttonText="View Report"

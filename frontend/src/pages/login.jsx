@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, User, Lock, ArrowRight, CloudSnow } from "lucide-react";
+import { Eye, EyeOff, User, Lock, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -20,7 +20,6 @@ function Login() {
     const email = formData.email.trim();
     const password = formData.password;
 
-    // Email Validation
     if (!email) {
       newErrors.email = "Email is required";
     } else if (!email.includes("@")) {
@@ -45,29 +44,27 @@ function Login() {
           password: formData.password,
         }),
       });
-      console.log("response: " + response);
+
       const data = await response.json();
       if (!response.ok) {
         setErrors({ password: data.message || "Login failed" });
         setIsLoading(false);
         return;
       }
-      setIsLoading(false);
-      console.log("Login successful:", data);
 
-      console.log(data.role);
+      setIsLoading(false);
+
       if (data.role === "admin") {
-        navigate("/admin-dashboard"); // Change to your admin dashboard route
+        navigate("/admin-dashboard");
       } else if (data.role === "dcm") {
-        navigate("/dcmdashboard"); // Change to your user dashboard route
+        navigate("/dcmdashboard");
       } else if (data.role === "dsp") {
-        navigate("/person-dashboard"); // Change to your user dashboard route
+        navigate("/person-dashboard");
       } else if (data.role === "donor") {
-        navigate("/"); // Change to your user dashboard route
+        navigate("/");
       } else {
         setErrors({ password: "You are not authorized as admin." });
       }
-      console.log(data.role);
     } catch (err) {
       setErrors({ password: "Network error. Please try again." });
       setIsLoading(false);
@@ -75,7 +72,15 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-orange-500 via-orange-100 to-white flex items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-r from-orange-500 via-orange-100 to-white flex items-center justify-center p-4 overflow-hidden relative">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition"
+      >
+        <ArrowRight className="w-5 h-5 transform rotate-180 text-orange-500" />
+      </button>
+
       <div className="relative z-10 w-full max-w-md animate-fade-slide">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-8 animate-zoom-in">
           {/* Header */}
@@ -211,7 +216,7 @@ function Login() {
   );
 }
 
-// Input component
+// Reusable Input Component
 const Input = ({ name, placeholder, Icon, value, onChange, error }) => (
   <div className="relative group">
     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

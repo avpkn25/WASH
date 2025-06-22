@@ -13,6 +13,7 @@ import {
   deleteDSP,
   getAllDSPs,
   registerAndDonate,
+  DSPProfile,
 } from "../controllers/userController.js";
 
 import { getAllFunds, totalFunds } from "../controllers/fundController.js";
@@ -51,5 +52,6 @@ router.delete("/delete-dsp/:id", authenticate, authorizeDCM, deleteDSP);
 router.get("/get-dsp", authenticate, authorizeDCM, getAllDSPs);
 
 // DSP Operations
+router.get("/dsp/profile/:id", authenticate, authorizeDSP, DSPProfile);
 
 export default router;

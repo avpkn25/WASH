@@ -1,7 +1,6 @@
 import Fund from "../models/Fund.js"; // Assuming you have an Admin model
 
 const addFund = async (req, res) => {
-  const id = req.user._id;
   const { amount, type } = req.body;
   try {
     // Validate input
@@ -9,9 +8,17 @@ const addFund = async (req, res) => {
       return res.status(400).json({ message: "Amount and type are required" });
     }
 
+    // Use donorId from authenticated user
+    const donorId = req.user && req.user._id ? req.user._id : null;
+    if (!donorId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Donor ID not found" });
+    }
+
     // Create new fund entry
     const newFund = new Fund({
-      donorId: id,
+      donorId,
       amount,
       mode: type,
     });
@@ -51,10 +58,8 @@ const totalFunds = async (req, res) => {
 
 const getAllFunds = async (req, res) => {
   try {
-    const funds = await Fund.find({ donorId: req.user._id }).populate(
-      "donorId",
-      "fullName email"
-    );
+    // Fetch all funds and populate donor info for admin view
+    const funds = await Fund.find({}).populate("donorId", "fullName email");
     res.status(200).json(funds);
   } catch (error) {
     console.error("Error fetching funds:", error);

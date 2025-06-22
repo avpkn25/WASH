@@ -1,4 +1,4 @@
-import User from "../models/User.js"; // Assuming you have an Admin model
+import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
@@ -85,7 +85,6 @@ const createDCM = async (req, res) => {
     });
     newDCM.role = "dcm";
     await newDCM.save();
-    createToken(res, newDCM._id);
     return res.status(201).json({ message: "DCM created successfully" });
   } catch (error) {
     console.error("Error creating DCM:", error);
@@ -113,7 +112,14 @@ const deleteDCM = async (req, res) => {
 const getAllDCMs = async (req, res) => {
   try {
     const dcmList = await User.find({ role: "dcm" }).select("-password");
-    return res.status(200).json(dcmList);
+    // Map fields to match frontend expectations
+    const mappedList = dcmList.map((user) => ({
+      id: user._id,
+      name: user.fullName,
+      email: user.email,
+      phone: user.phone,
+    }));
+    return res.status(200).json(mappedList);
   } catch (error) {
     console.error("Error fetching DCMs:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -137,7 +143,6 @@ const createDSP = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -148,11 +153,10 @@ const createDSP = async (req, res) => {
       phone,
       gender,
       dob,
+      role: "dsp", // Set role directly in constructor
     });
-    newDSP.role = "dsp"; // Set the role to 'dcm'
     await newDSP.save();
-    createToken(res, newDSP._id);
-    return res.status(201).json({ message: "DCM created successfully" });
+    return res.status(201).json({ message: "DSP created successfully" });
   } catch (error) {
     console.error("Error creating DSP:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -231,6 +235,50 @@ const getAllDSPs = async (req, res) => {
   }
 };
 
+// Register donor and add fund in one API
+const registerAndDonate = async (req, res) => {
+  const { fullName, email, password, phone, gender, dob, amount, paymentMode } =
+    req.body;
+  try {
+    // Check if user already exists
+    let user = await User.findOne({ email });
+    if (!user) {
+      // Password must be provided for new user
+      if (!password) {
+        return res
+          .status(400)
+          .json({ message: "Password is required for new donor registration" });
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      user = new User({
+        fullName,
+        email,
+        password: hashedPassword,
+        phone,
+        gender,
+        dob,
+        role: "donor",
+      });
+      await user.save();
+    }
+    // Add fund entry
+    const Fund = (await import("../models/Fund.js")).default;
+    const newFund = new Fund({
+      donorId: user._id,
+      amount,
+      mode: paymentMode,
+    });
+    await newFund.save();
+    return res
+      .status(201)
+      .json({ message: "Donation successful", fund: newFund, user });
+  } catch (error) {
+    console.error("Error in registerAndDonate:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export {
   loginUser,
   logoutUser,
@@ -244,4 +292,5 @@ export {
   deleteDSP,
   getAllDSPs,
   createDonor,
+  registerAndDonate,
 };

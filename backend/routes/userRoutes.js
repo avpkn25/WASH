@@ -12,13 +12,10 @@ import {
   updateDSP,
   deleteDSP,
   getAllDSPs,
+  registerAndDonate,
 } from "../controllers/userController.js";
 
-import {
-  addFund,
-  getAllFunds,
-  totalFunds,
-} from "../controllers/fundController.js";
+import { getAllFunds, totalFunds } from "../controllers/fundController.js";
 import {
   authenticate,
   authorizeAdmin,
@@ -35,7 +32,8 @@ router.post("/logout", logoutUser); // done
 router.post("/create-donor", createDonor); // done
 
 // Donor Operations
-router.post("/add-fund", authenticate, authorizeDonor, addFund);
+router.post("/add-fund", registerAndDonate);
+router.post("/register-and-donate", registerAndDonate);
 
 // Admin Operations
 router.post("/create-dcm", authenticate, authorizeAdmin, createDCM);

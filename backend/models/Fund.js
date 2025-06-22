@@ -15,6 +15,10 @@ const fundSchema = new mongoose.Schema(
       type: String,
         enum: ["UPI", "CARD", "NET_BANKING", "WALLET"],
     },
+    date: {
+      type: Date,
+      default: Date.now,
+    }
   },
   { timestamps: true }
 );
